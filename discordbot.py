@@ -11,6 +11,9 @@ client = discord.Client()
 
 recruit_message = {}
 
+print(discord._version_)
+
+
 
 @bot.event
 async def on_command_error(ctx, error):
