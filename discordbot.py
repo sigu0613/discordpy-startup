@@ -1,6 +1,7 @@
 #discord.pyのインポート
 from asyncio import sleep
 import discord
+token = os.environ['DISCORD_BOT_TOKEN']
 client = discord.Client()
 #BOTログイン処理
 @client.event
