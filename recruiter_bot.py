@@ -1,12 +1,15 @@
+from discord.ext import commands
+import os
 import discord
 import traceback
 import asyncio
-from discord.ext import commands
+
 
 bot = commands.Bot(command_prefix='.', description='自動でチーム募集をするBOTです')
-token = ''
 client = discord.Client()
 
+
+token = os.environ['DISCORD_BOT_TOKEN']
 recruit_message = {}
 
 @bot.event
@@ -112,3 +115,6 @@ except KeyboardInterrupt:
 	loop.run_until_complete(logout())
 finally:
 	loop.close()
+	
+	
+bot.run(token)
