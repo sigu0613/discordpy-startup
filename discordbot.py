@@ -1,34 +1,14 @@
-from discord.ext import commands
-import os
 import discord
 import traceback
 import asyncio
+from discord.ext import commands
 
 bot = commands.Bot(command_prefix='.', description='自動でチーム募集をするBOTです')
 token = os.environ['DISCORD_BOT_TOKEN']
-
 client = discord.Client()
 
 recruit_message = {}
 
-print(discord.__version__)
-
-
-
-@bot.event
-async def on_command_error(ctx, error):
-    orig_error = getattr(error, "original", error)
-    error_msg = ''.join(traceback.TracebackException.from_exception(orig_error).format())
-    await ctx.send(error_msg)
-
-@bot.command()
-async def ping(ctx):
-    await ctx.send('pong')
-    
-@bot.command()
-async def neko(ctx):
-    await ctx.send('にゃーん')
-    
 @bot.event
 async def on_reaction_add(reaction, user):
 	message = reaction.message
@@ -67,7 +47,8 @@ async def on_reaction_add(reaction, user):
 		else:
 			await message.edit(content = (recruit_message[message.id]["title"] + "　募集中！ ＠{count}人(↑で参加 ↓で退出)\n```\n{str} ```".format(count = recruit_message[message.id]["max_user"] - len(recruit_message[message.id]["users"]), str = users_str)))
 			recruit_message[message.id]["raw_message"] = message
-    
+
+#
 @bot.command()
 async def s(ctx, title = "", max_user = 3, remain_time = 300):
 	users_str = "{}".format(ctx.message.author.name)
@@ -131,6 +112,3 @@ except KeyboardInterrupt:
 	loop.run_until_complete(logout())
 finally:
 	loop.close()
-
-
-bot.run(token)
