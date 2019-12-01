@@ -4,6 +4,8 @@ import traceback
 import asyncio
 import discord
 
+print(discord.__version__)
+
 bot = commands.Bot(command_prefix='.', description='自動でチーム募集をするBOTです')
 token = os.environ['DISCORD_BOT_TOKEN']
 client = discord.Client()
