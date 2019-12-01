@@ -53,7 +53,7 @@ async def on_reaction_add(reaction, user):
 
 #
 @bot.command()
-async def s(ctx, title = "", max_user = 3, remain_time = 300):
+async def s(ctx, title = "", max_user = 2, remain_time = 300):
 	users_str = "{}".format(ctx.message.author.name)
 	if(ctx.message.author.nick != None):
 		users_str = "{}".format(ctx.message.author.nick)
