@@ -1,13 +1,11 @@
-#discord.pyのインポート
-from discord.ext
-import sleep
 import discord
-import commands
-import os
 import traceback
+import asyncio
+from discord.ext import commands
 
-token = os.environ['DISCORD_BOT_TOKEN']
-bot = commands.Bot(command_prefix='/')
+bot = commands.Bot(command_prefix='.', description='自動でチーム募集をするBOTです')
+token = 'DISCORD_BOT_TOKEN'
+client = discord.Client()
 
 recruit_message = {}
 
@@ -114,5 +112,3 @@ except KeyboardInterrupt:
 	loop.run_until_complete(logout())
 finally:
 	loop.close()
-    
-bot.run(token)
