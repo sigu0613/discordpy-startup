@@ -11,7 +11,7 @@ client = discord.Client()
 
 recruit_message = {}
 
-print(discord._version_)
+print(discord.__version__)
 
 
 
