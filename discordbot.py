@@ -1,9 +1,15 @@
 from discord.ext import commands
 import os
+import discord
 import traceback
+import asyncio
 
-bot = commands.Bot(command_prefix='/')
+bot = commands.Bot(command_prefix='.', description='自動でチーム募集をするBOTです')
 token = os.environ['DISCORD_BOT_TOKEN']
+
+client = discord.Client()
+
+recruit_message = {}
 
 
 @bot.event
