@@ -21,8 +21,8 @@ async def on_reaction_add(reaction, user):
 		isFull = False
 		if(emj == "⬆️" and user.id != recruit_message[message.id]["writer_id"]):
 			if(recruit_message[message.id]["max_user"] == -1 or len(recruit_message[message.id]["users"]) < recruit_message[message.id]["max_user"]):
-				
-				recruit_message[message.id]["users"].append(user.id)
+				if(user.id not in recruit_message[message.id]["users"]):
+					recruit_message[message.id]["users"].append(user.id)
 			if(recruit_message[message.id]["max_user"] != -1 and len(recruit_message[message.id]["users"]) >= recruit_message[message.id]["max_user"]):
 				isFull = True
 		elif(emj == "⬇️" and user.id != recruit_message[message.id]["writer_id"] and user.id in recruit_message[message.id]["users"]):
