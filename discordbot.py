@@ -19,12 +19,12 @@ async def on_reaction_add(reaction, user):
 		emj = str(reaction.emoji)
 		await message.remove_reaction(emj, user)
 		isFull = False
-		if(emj == "⬆️"):
+		if(emj == "⬆️" and user.id != recruit_message[message.id]["writer_id"]):
 			if(recruit_message[message.id]["max_user"] == -1 or len(recruit_message[message.id]["users"]) < recruit_message[message.id]["max_user"]):
 				recruit_message[message.id]["users"].append(user.id)
 			if(recruit_message[message.id]["max_user"] != -1 and len(recruit_message[message.id]["users"]) >= recruit_message[message.id]["max_user"]):
 				isFull = True
-		elif(emj == "⬇️" and user.id in recruit_message[message.id]["users"]):
+		elif(emj == "⬇️" and user.id != recruit_message[message.id]["writer_id"] and user.id in recruit_message[message.id]["users"]):
 			recruit_message[message.id]["users"].remove(user.id)
 		elif(emj == "✖" and user.id == recruit_message[message.id]["writer_id"]):
 			isFull = True
@@ -42,6 +42,9 @@ async def on_reaction_add(reaction, user):
 				recruit_message[message.id]["users"].remove(user_id)
 		users_str.rstrip()
 		if(isFull):
+			for user_id in recruit_message[message.id]["users"]:
+				if(bot.get_user(user_id) != None and recruit_message[message.id]["room"] != -1):
+					await message.guild.get_member(user_id).send("{}の部屋番号は{}　です".format(recruit_message[message.id]["title"], str(recruit_message[message.id]["room"])))
 			await message.edit(content = (recruit_message[message.id]["title"] + "　募集終了\n```\n{} ```".format(users_str)))
 			del recruit_message[message.id]
 			await message.remove_reaction("⬆️", bot.user)
@@ -53,13 +56,14 @@ async def on_reaction_add(reaction, user):
 
 #
 @bot.command()
-async def s(ctx, title = "", max_user = 2, remain_time = 300):
+async def s(ctx, room_id = -1, title = "", max_user = 3, remain_time = 300):
 	users_str = "{}".format(ctx.message.author.name)
 	if(ctx.message.author.nick != None):
 		users_str = "{}".format(ctx.message.author.nick)
 	users_str.rstrip("")
 	mes = await ctx.send(title + "　募集中！　＠{count}人(↑で参加 ↓で退出)\n```\n{str} ```".format(count = max_user, str = users_str))
-	recruit_message[mes.id] = { "time" : remain_time, "max_user" : max_user, "writer_id" : ctx.message.author.id, "title" : title, "users" : [], "raw_message" : mes }
+	recruit_message[mes.id] = { "room" : room_id, "time" : remain_time, "max_user" : max_user, "writer_id" : ctx.message.author.id, "title" : title, "users" : [], "raw_message" : mes }
+	await ctx.message.delete()
 	await mes.add_reaction("⬆️")
 	await mes.add_reaction("⬇️")
 	await mes.add_reaction("✖")
