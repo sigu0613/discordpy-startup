@@ -46,4 +46,4 @@ async def on_message(message):
                 delmsg = await client.send_message(message.channel, "admin権限がありません。")
                 await sleep(5)
                 await client.delete_message(delmsg)
-client.run("***")
+client.run(token)
