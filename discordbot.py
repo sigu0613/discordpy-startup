@@ -1,10 +1,16 @@
 #discord.pyのインポート
-from asyncio import sleep
+from discord.ext
+import sleep
 import discord
+import commands
+import os
+import traceback
+
 token = os.environ['DISCORD_BOT_TOKEN']
-client = discord.Client()
+bot = commands.Bot(command_prefix='/')
+
 #BOTログイン処理
-@client.event
+@bot.event
 async def on_ready():
     print('Logged in as')
     print(client.user.name)
@@ -12,7 +18,7 @@ async def on_ready():
     print('------')
     await client.change_presence(game=discord.Game(name='!delchat *'))
 # BOT動作プログラム
-@client.event
+@bot.event
 async def on_message(message):
     # 送り主がBotだった場合反応したくないので
     if client.user != message.author:
@@ -46,4 +52,4 @@ async def on_message(message):
                 delmsg = await client.send_message(message.channel, "admin権限がありません。")
                 await sleep(5)
                 await client.delete_message(delmsg)
-client.run(token)
+bot.run(token)
