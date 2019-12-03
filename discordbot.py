@@ -89,6 +89,8 @@ async def disconnect_timer():
 						users_str = "{}".format(mes.guild.get_member(writer_id).nick)
 					for user_id in users:
 						if(bot.get_user(user_id) != None):
+							if(room != ""):
+								await mes.guild.get_member(user_id).send("{}の部屋番号は　{}　です".format(title, room))
 							if(mes.guild.get_member(user_id).nick != None):
 								users_str += "\n{}".format(mes.guild.get_member(user_id).nick)
 							else:
