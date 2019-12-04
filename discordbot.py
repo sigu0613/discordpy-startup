@@ -46,10 +46,19 @@ async def on_reaction_add(reaction, user):
 			users = recruit_message[message.id]["users"]
 			title = recruit_message[message.id]["title"]
 			room = recruit_message[message.id]["room"]
+			writer_id = recruit_message[message.id]["writer_id"]
+			full_users = users + [writer_id]
 			del recruit_message[message.id]
 			for user_id in users:
-				if(bot.get_user(user_id) != None and room != ""):
-					await message.guild.get_member(user_id).send("{}の部屋番号は　{}　です".format(title, room))
+				if(bot.get_user(user_id) != None):
+					if(user_id not in lastest_recruit_data and len(lastest_recruit_data) >= cache_limit):
+						del lastest_recruit_data[lastest_recruit_data.keys()[0]]
+					lastest_recruit_data[user_id] = { "title" : title, "users" : full_users }
+					if(room != "-1"):
+						await message.guild.get_member(user_id).send("{}の部屋番号は　{}　です".format(title, room))
+			if(writer_id not in lastest_recruit_data and len(lastest_recruit_data) >= cache_limit):
+				del lastest_recruit_data[lastest_recruit_data.keys()[0]]
+			lastest_recruit_data[writer_id] = { "title" : title, "users" : full_users }
 			await message.edit(content = (title + "　募集終了\n```\n{} ```".format(users_str)))
 			await message.remove_reaction("⬆️", bot.user)
 			await message.remove_reaction("⬇️", bot.user)
@@ -58,9 +67,25 @@ async def on_reaction_add(reaction, user):
 			await message.edit(content = (recruit_message[message.id]["title"] + "　募集中！ ＠{count}人(↑で参加 ↓で退出)\n```\n{str} ```".format(count = recruit_message[message.id]["max_user"] - len(recruit_message[message.id]["users"]), str = users_str)))
 			recruit_message[message.id]["raw_message"] = message
 
-#
 @bot.command()
-async def s(ctx, room_id = "", title = "", max_user = 2, remain_time = 300):
+async def r(ctx, room_id = "-1"):
+	sender_id = ctx.message.author.id
+	if(sender_id in lastest_recruit_data):
+		title = lastest_recruit_data[sender_id]["title"]
+		users = lastest_recruit_data[sender_id]["users"]
+		notify_txt = ""
+		for user_id in users:
+			notify_txt += ctx.message.guild.get_member(user_id).mention + " "
+			if(user_id != sender_id):
+				await ctx.message.guild.get_member(user_id).send("{}の新しい部屋番号は　{}　です".format(title, room_id))
+		await ctx.send(notify_txt + "新しい部屋番号を送信しました")
+		await ctx.message.delete()
+	elif(bot.get_user(sender_id) != None):
+		await ctx.send("{} 最後に参加した部屋が存在しないか、古すぎます。".format(bot.get_user(sender_id).mention))
+		await ctx.message.delete()
+		
+@bot.command()
+async def s(ctx, room_id = "-1", title = "", max_user = 2, remain_time = 300):
 	users_str = "{}".format(ctx.message.author.name)
 	if(ctx.message.author.nick != None):
 		users_str = "{}".format(ctx.message.author.nick)
@@ -83,13 +108,17 @@ async def disconnect_timer():
 					title = recruit_message[mes_key]["title"]
 					room = recruit_message[mes_key]["room"]
 					writer_id = recruit_message[mes_key]["writer_id"]
+					full_users = users + [writer_id]
 					del recruit_message[mes_key]
 					users_str = "{}".format(mes.guild.get_member(writer_id).name)
 					if(mes.guild.get_member(writer_id).nick != None):
 						users_str = "{}".format(mes.guild.get_member(writer_id).nick)
 					for user_id in users:
 						if(bot.get_user(user_id) != None):
-							if(room != ""):
+							if(user_id not in lastest_recruit_data and len(lastest_recruit_data) >= cache_limit):
+								del lastest_recruit_data[lastest_recruit_data.keys()[0]]
+							lastest_recruit_data[user_id] = { "title" : title, "users" : full_users }
+							if(room != "-1"):
 								await mes.guild.get_member(user_id).send("{}の部屋番号は　{}　です".format(title, room))
 							if(mes.guild.get_member(user_id).nick != None):
 								users_str += "\n{}".format(mes.guild.get_member(user_id).nick)
@@ -98,6 +127,9 @@ async def disconnect_timer():
 						else:
 							users.remove(user_id)
 					users_str.rstrip()
+					if(writer_id not in lastest_recruit_data and len(lastest_recruit_data) >= cache_limit):
+						del lastest_recruit_data[lastest_recruit_data.keys()[0]]
+					lastest_recruit_data[writer_id] = { "title" : title, "users" : full_users }
 					await mes.edit(content = (title + "　募集終了\n```\n{} ```".format(users_str)))
 					await mes.remove_reaction("⬆️", bot.user)
 					await mes.remove_reaction("⬇️", bot.user)
