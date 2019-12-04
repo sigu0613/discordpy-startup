@@ -11,6 +11,8 @@ client = discord.Client()
 
 token = os.environ['DISCORD_BOT_TOKEN']
 recruit_message = {}
+lastest_recruit_data = {}
+cache_limit = 300
 
 @bot.event
 async def on_reaction_add(reaction, user):
