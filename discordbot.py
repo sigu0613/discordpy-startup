@@ -86,7 +86,7 @@ async def on_reaction_add(reaction, user):
 			recruit_message[message.id]["raw_message"] = message
 
 @bot.command()
-async def r_test(ctx, room_id = "-1"):
+async def r(ctx, room_id = "-1"):
 	sender_id = ctx.message.author.id
 	if(sender_id in lastest_recruit_data):
 		title = lastest_recruit_data[sender_id]["title"]
@@ -103,7 +103,7 @@ async def r_test(ctx, room_id = "-1"):
 		await ctx.message.delete()
 		
 @bot.command()
-async def s_test(ctx, room_id = "-1", title = "", max_user = 2, remain_time = 300):
+async def s(ctx, room_id = "-1", title = "", max_user = 2, remain_time = 300):
 	users_str = "{name} [{id}]".format(name = ctx.message.author.name, id = str(ctx.message.author))
 	if(ctx.message.author.nick != None):
 		users_str = "{name} [{id}]".format(name = ctx.message.author.nick, id = str(ctx.message.author))
@@ -116,7 +116,7 @@ async def s_test(ctx, room_id = "-1", title = "", max_user = 2, remain_time = 30
 	await mes.add_reaction("✖")
 	
 @bot.command()
-async def l_test(ctx, room_id = "-1", title = "", max_user = 5, lottery_user = 2, remain_time = 300):
+async def l(ctx, room_id = "-1", title = "", max_user = 5, lottery_user = 2, remain_time = 300):
 	users_str = "{name} [{id}]".format(name = ctx.message.author.name, id = str(ctx.message.author))
 	if(ctx.message.author.nick != None):
 		users_str = "{name} [{id}]".format(name = ctx.message.author.nick, id = str(ctx.message.author))
@@ -130,7 +130,7 @@ async def l_test(ctx, room_id = "-1", title = "", max_user = 5, lottery_user = 2
 	
 
 @bot.command()
-async def s1_test(ctx, room_id = "-1", title = ""):
+async def s1(ctx, room_id = "-1", title = ""):
 	users_str = "{name} [{id}]".format(name = ctx.message.author.name, id = str(ctx.message.author))
 	if(ctx.message.author.nick != None):
 		users_str = "{name} [{id}]".format(name = ctx.message.author.nick, id = str(ctx.message.author))
