@@ -33,9 +33,9 @@ async def on_reaction_add(reaction, user):
 		elif(emj == "✖" and user.id == recruit_message[message.id]["writer_id"]):
 			isFull = True
 
-		users_str = "{}".format(message.guild.get_member(recruit_message[message.id]["writer_id"]).name)
+		users_str = "{name} [{id}]".format(name = message.guild.get_member(recruit_message[message.id]["writer_id"]).name, id = str(message.guild.get_member(recruit_message[message.id]["writer_id"])))
 		if(message.guild.get_member(recruit_message[message.id]["writer_id"]).nick != None):
-			users_str = "{}".format(message.guild.get_member(recruit_message[message.id]["writer_id"]).nick)
+			users_str = "{name} [{id}]".format(name = message.guild.get_member(recruit_message[message.id]["writer_id"]).nick, id = str(message.guild.get_member(recruit_message[message.id]["writer_id"])))
 		
 		if(isFull):
 			users = recruit_message[message.id]["users"]
@@ -50,9 +50,9 @@ async def on_reaction_add(reaction, user):
 			for user_id in users:
 				if(bot.get_user(user_id) != None):
 					if(message.guild.get_member(user_id).nick != None):
-						users_str += "\n{}".format(message.guild.get_member(user_id).nick)
+						users_str += "\n{name} [{id}]".format(name = message.guild.get_member(user_id).nick, id = str(message.guild.get_member(user_id)))
 					else:
-						users_str += "\n{}".format(message.guild.get_member(user_id).name)
+						users_str += "\n{name} [{id}]".format(name = message.guild.get_member(user_id).name, id = str(message.guild.get_member(user_id)))
 			users_str.rstrip()
 
 			for user_id in users:
@@ -73,9 +73,9 @@ async def on_reaction_add(reaction, user):
 			for user_id in recruit_message[message.id]["users"]:
 				if(bot.get_user(user_id) != None):
 					if(message.guild.get_member(user_id).nick != None):
-						users_str += "\n{}".format(message.guild.get_member(user_id).nick)
+						users_str += "\n{name} [{id}]".format(name = message.guild.get_member(user_id).nick, id = str(message.guild.get_member(user_id)))
 					else:
-						users_str += "\n{}".format(message.guild.get_member(user_id).name)
+						users_str += "\n{name} [{id}]".format(name = message.guild.get_member(user_id).name, id = str(message.guild.get_member(user_id)))
 				else:
 					recruit_message[message.id]["users"].remove(user_id)
 			users_str.rstrip()
@@ -104,9 +104,9 @@ async def r_test(ctx, room_id = "-1"):
 		
 @bot.command()
 async def s_test(ctx, room_id = "-1", title = "", max_user = 2, remain_time = 300):
-	users_str = "{}".format(ctx.message.author.name)
+	users_str = "{name} [{id}]".format(name = ctx.message.author.name, id = str(ctx.message.author))
 	if(ctx.message.author.nick != None):
-		users_str = "{}".format(ctx.message.author.nick)
+		users_str = "{name} [{id}]".format(name = ctx.message.author.nick, id = str(ctx.message.author))
 	users_str.rstrip("")
 	mes = await ctx.send(title + "　募集中！　＠{count}人(↑で参加 ↓で退出)\n```\n{str} ```".format(count = max_user, str = users_str))
 	recruit_message[mes.id] = { "room" : room_id, "time" : remain_time, "max_user" : max_user, "writer_id" : ctx.message.author.id, "title" : title, "users" : [], "raw_message" : mes, "lottery_user" : -1 }
@@ -117,9 +117,9 @@ async def s_test(ctx, room_id = "-1", title = "", max_user = 2, remain_time = 30
 	
 @bot.command()
 async def l_test(ctx, room_id = "-1", title = "", max_user = 5, lottery_user = 2, remain_time = 300):
-	users_str = "{}".format(ctx.message.author.name)
+	users_str = "{name} [{id}]".format(name = ctx.message.author.name, id = str(ctx.message.author))
 	if(ctx.message.author.nick != None):
-		users_str = "{}".format(ctx.message.author.nick)
+		users_str = "{name} [{id}]".format(name = ctx.message.author.nick, id = str(ctx.message.author))
 	users_str.rstrip("")
 	mes = await ctx.send(title + "　募集中！(抽選 {max_user}人->{lottery_user}人)　＠{count}人(↑で参加 ↓で退出)\n```\n{str} ```".format(max_user = max_user, lottery_user = lottery_user, count = max_user, str = users_str))
 	recruit_message[mes.id] = { "room" : room_id, "time" : 300, "max_user" : max_user, "writer_id" : ctx.message.author.id, "title" : title, "users" : [], "raw_message" : mes, "lottery_user" : lottery_user }
@@ -131,9 +131,9 @@ async def l_test(ctx, room_id = "-1", title = "", max_user = 5, lottery_user = 2
 
 @bot.command()
 async def s1_test(ctx, room_id = "-1", title = ""):
-	users_str = "{}".format(ctx.message.author.name)
+	users_str = "{name} [{id}]".format(name = ctx.message.author.name, id = str(ctx.message.author))
 	if(ctx.message.author.nick != None):
-		users_str = "{}".format(ctx.message.author.nick)
+		users_str = "{name} [{id}]".format(name = ctx.message.author.nick, id = str(ctx.message.author))
 	users_str.rstrip("")
 	mes = await ctx.send(title + "　募集中！　＠{count}人(↑で参加 ↓で退出)\n```\n{str} ```".format(count = 1, str = users_str))
 	recruit_message[mes.id] = { "room" : room_id, "time" : 300, "max_user" : 1, "writer_id" : ctx.message.author.id, "title" : title, "users" : [], "raw_message" : mes, "lottery_user" : -1 }
@@ -142,35 +142,6 @@ async def s1_test(ctx, room_id = "-1", title = ""):
 	await mes.add_reaction("⬇️")
 	await mes.add_reaction("✖")
 	
-@bot.command()
-async def r(ctx, room_id = "-1"):
-	sender_id = ctx.message.author.id
-	if(sender_id in lastest_recruit_data):
-		title = lastest_recruit_data[sender_id]["title"]
-		users = lastest_recruit_data[sender_id]["users"]
-		notify_txt = ""
-		for user_id in users:
-			notify_txt += ctx.message.guild.get_member(user_id).mention + " "
-			if(user_id != sender_id):
-				await ctx.message.guild.get_member(user_id).send("{}の新しい部屋番号は　{}　です".format(title, room_id))
-		await ctx.send(notify_txt + "新しい部屋番号を送信しました")
-		await ctx.message.delete()
-	elif(bot.get_user(sender_id) != None):
-		await ctx.send("{} 最後に参加した部屋が存在しないか、古すぎます。".format(bot.get_user(sender_id).mention))
-		await ctx.message.delete()
-		
-@bot.command()
-async def s(ctx, room_id = "-1", title = "", max_user = 2, remain_time = 300):
-	users_str = "{}".format(ctx.message.author.name)
-	if(ctx.message.author.nick != None):
-		users_str = "{}".format(ctx.message.author.nick)
-	users_str.rstrip("")
-	mes = await ctx.send(title + "　募集中！　＠{count}人(↑で参加 ↓で退出)\n```\n{str} ```".format(count = max_user, str = users_str))
-	recruit_message[mes.id] = { "room" : room_id, "time" : remain_time, "max_user" : max_user, "writer_id" : ctx.message.author.id, "title" : title, "users" : [], "raw_message" : mes }
-	await ctx.message.delete()
-	await mes.add_reaction("⬆️")
-	await mes.add_reaction("⬇️")
-	await mes.add_reaction("✖")
 
 async def disconnect_timer():
 	while True:
@@ -188,9 +159,9 @@ async def disconnect_timer():
 						users = random.sample(users, lottery_user)
 					full_users = users + [writer_id]
 					del recruit_message[mes_key]
-					users_str = "{}".format(mes.guild.get_member(writer_id).name)
+					users_str = "{name} [{id}]".format(name = mes.guild.get_member(writer_id).name, id = str(mes.guild.get_member(writer_id)))
 					if(mes.guild.get_member(writer_id).nick != None):
-						users_str = "{}".format(mes.guild.get_member(writer_id).nick)
+						users_str = "{name} [{id}]".format(name = mes.guild.get_member(writer_id).nick, id = str(mes.guild.get_member(writer_id)))
 					for user_id in users:
 						if(bot.get_user(user_id) != None):
 							if(user_id not in lastest_recruit_data and len(lastest_recruit_data) >= cache_limit):
@@ -199,9 +170,9 @@ async def disconnect_timer():
 							if(room != "-1"):
 								await mes.guild.get_member(user_id).send("{}の部屋番号は　{}　です".format(title, room))
 							if(mes.guild.get_member(user_id).nick != None):
-								users_str += "\n{}".format(mes.guild.get_member(user_id).nick)
+								users_str += "\n{name} [{id}]".format(name = mes.guild.get_member(user_id).nick, id = str(mes.guild.get_member(user_id)))
 							else:
-								users_str += "\n{}".format(mes.guild.get_member(user_id).name)
+								users_str += "\n{name} [{id}]".format(name = mes.guild.get_member(user_id).name, id = str(mes.guild.get_member(user_id)))
 						else:
 							users.remove(user_id)
 					users_str.rstrip()
