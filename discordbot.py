@@ -4,7 +4,7 @@ import discord
 import traceback
 import asyncio
 import random
-
+rbtflag = False
 
 bot = commands.Bot(command_prefix='.', description='自動でチーム募集をするBOTです')
 client = discord.Client()
