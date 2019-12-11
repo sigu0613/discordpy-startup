@@ -88,7 +88,7 @@ async def on_reaction_add(reaction, user):
 @bot.command()
 async def r(ctx, room_id = "-1"):
 	sender_id = ctx.message.author.id
-	if(sender_id in lastest_recruit_data):
+	if(sender_id in lastest_recruit_data and room_id != -1):
 		title = lastest_recruit_data[sender_id]["title"]
 		users = lastest_recruit_data[sender_id]["users"]
 		notify_txt = ""
