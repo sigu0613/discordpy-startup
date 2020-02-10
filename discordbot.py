@@ -1,4 +1,4 @@
-from discord.ext import commands
+"""from discord.ext import commands
 import os
 import discord
 import traceback
@@ -200,4 +200,5 @@ async def startup():
 
 async def logout():
 	global bot
-	await bot.close()
+	await bot.close()"""
+print("TEST")
